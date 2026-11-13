@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   else { echo "<p>Error: " . $conn->error . "</p>"; }
 }
 ?>
-<h2>CAT 2 - Sign Up (Trevor Kimani)</h2>
+<h2>CAT 2 - Sign Up (Trevor Kimani) - v2</h2>
 <form method="post">
   <input name="username" placeholder="Username" required><br>
   <input name="email" type="email" placeholder="Email" required><br>
