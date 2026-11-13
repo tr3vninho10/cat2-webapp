@@ -1,18 +1,19 @@
-cat > signup.php <<'EOF'
-<?php include 'config.php';
+<?php
+include 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $h = password_hash($_POST['password'], PASSWORD_DEFAULT);
-  $s = $conn->prepare("INSERT INTO users(username,email,password) VALUES(?,?,?)");
-  $s->bind_param("sss", $_POST['username'], $_POST['email'], $h);
-  echo $s->execute() ? "<p>Registered successfully</p>" : "<p>Error: " . $conn->error . "</p>";
+  $s = $conn->prepare("SELECT password FROM users WHERE username=?");
+  $s->bind_param("s", $_POST['username']);
+  $s->execute();
+  $r = $s->get_result()->fetch_assoc();
+  if ($r && password_verify($_POST['password'], $r['password'])) {
+    echo "<p>Login successful: " . htmlspecialchars($_POST['username']) . "</p>";
+  } else { echo "<p>Invalid credentials</p>"; }
 }
 ?>
-<h2>CAT 2 - Sign Up</h2>
+<h2>CAT 2 - Login</h2>
 <form method="post">
   <input name="username" placeholder="Username" required><br>
-  <input name="email" type="email" placeholder="Email" required><br>
   <input name="password" type="password" placeholder="Password" required><br>
-  <button>Sign up</button>
+  <button>Login</button>
 </form>
-<a href="login.php">Login</a> | <a href="feedback.php">Feedback</a>
-EOF
+<a href="signup.php">Sign up</a>
